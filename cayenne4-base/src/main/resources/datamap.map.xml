@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-map xmlns="http://cayenne.apache.org/schema/9/modelMap"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://cayenne.apache.org/schema/9/modelMap http://cayenne.apache.org/schema/9/modelMap.xsd"
+	 project-version="9">
+	<property name="defaultPackage" value="com.ade.exp.cayenne.base.persistent"/>
+	<db-entity name="COMPANY">
+		<db-attribute name="address" type="VARCHAR" length="100"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
+		<db-attribute name="name" type="VARCHAR" length="20"/>
+	</db-entity>
+	<db-entity name="COUNTRY">
+		<db-attribute name="CODE" type="INTEGER" length="10"/>
+		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
+		<db-attribute name="NAME" type="VARCHAR" length="50"/>
+	</db-entity>
+	<db-entity name="USER">
+		<db-attribute name="ADDRESS" type="VARCHAR" length="100"/>
+		<db-attribute name="age" type="INTEGER" length="10"/>
+		<db-attribute name="company_id" type="INTEGER" length="10"/>
+		<db-attribute name="email" type="VARCHAR" length="50"/>
+		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
+		<db-attribute name="name" type="VARCHAR" length="20"/>
+	</db-entity>
+	<obj-entity name="Company" className="com.ade.exp.cayenne.base.persistent.Company" dbEntityName="COMPANY">
+		<obj-attribute name="address" type="java.lang.String" db-attribute-path="address"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+	</obj-entity>
+	<obj-entity name="Country" className="com.ade.exp.cayenne.base.persistent.Country" dbEntityName="COUNTRY">
+		<obj-attribute name="code" type="java.lang.Integer" db-attribute-path="CODE"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="NAME"/>
+	</obj-entity>
+	<obj-entity name="User" className="com.ade.exp.cayenne.base.persistent.User" dbEntityName="USER">
+		<obj-attribute name="address" type="java.lang.String" db-attribute-path="ADDRESS"/>
+		<obj-attribute name="age" type="java.lang.Integer" db-attribute-path="age"/>
+		<obj-attribute name="email" type="java.lang.String" db-attribute-path="email"/>
+		<obj-attribute name="name" type="java.lang.String" db-attribute-path="name"/>
+	</obj-entity>
+	<db-relationship name="users" source="COMPANY" target="USER" toMany="true">
+		<db-attribute-pair source="id" target="company_id"/>
+	</db-relationship>
+	<db-relationship name="company" source="USER" target="COMPANY" toMany="false">
+		<db-attribute-pair source="company_id" target="id"/>
+	</db-relationship>
+	<obj-relationship name="users" source="Company" target="User" deleteRule="Deny" db-relationship-path="users"/>
+	<obj-relationship name="company" source="User" target="Company" deleteRule="Nullify" db-relationship-path="company"/>
+</data-map>
