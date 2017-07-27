@@ -5,8 +5,12 @@ import com.ade.exp.cayenne.base.persistent.User;
 import org.apache.cayenne.ObjectContext;
 import org.apache.cayenne.configuration.server.ServerRuntime;
 import org.apache.cayenne.query.ObjectSelect;
+import org.apache.cayenne.query.QueryCacheStrategy;
+import org.apache.cayenne.query.RefreshQuery;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -37,11 +41,34 @@ public class QueryExp {
 
     private static void base2() {
         ObjectContext context = cayenneRuntime.newContext();
+        System.out.println("-----");
         List<User> userList = ObjectSelect
                 .query(User.class)
                 .where(User.NAME.eq("user888"))
+                .localCache("cache1") // 同一个ObjectContext
                 .select(context);
         for (User user : userList) {
+            System.out.println(user);
+        }
+
+        List<User> userList2 = ObjectSelect
+                .query(User.class)
+                .where(User.NAME.eq("user888"))
+                .localCache("cache1")
+                .select(context);
+        for (User user : userList2) {
+            System.out.println(user);
+        }
+
+        RefreshQuery refresh = new RefreshQuery("cache2");
+        context.performGenericQuery(refresh);
+
+        List<User> userList3 = ObjectSelect
+                .query(User.class)
+                .where(User.NAME.eq("user888"))
+                .sharedCache("cache2") // 可以跨ObjectContext
+                .select(context);
+        for (User user : userList3) {
             System.out.println(user);
         }
     }
@@ -105,7 +132,13 @@ public class QueryExp {
     }
 
     public static void main(String[] args) {
-        base1();
+        base2();
+        try {
+            TimeUnit.SECONDS.sleep(20);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        base2();
     }
 
 }
