@@ -43,34 +43,6 @@
                 <artifactId>cayenne-modeler-maven-plugin</artifactId>
                 <version>4.0.B1</version>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.cayenne.plugins</groupId>
-                <artifactId>cayenne-maven-plugin</artifactId>
-                <version>4.0.B1</version>
-
-                <configuration>
-                    <map>${project.basedir}/src/main/resources/datamap.map.xml</map>
-                    <dataSource>
-                        <url>jdbc:mysql://192.168.56.102:3306/dev/base</url>
-                        <driver>com.mysql.jdbc.Driver</driver>
-                        <username>dev</username>
-                        <password>dev123456</password>
-                    </dataSource>
-                    <dbimport>
-                        <defaultPackage>com.example.package</defaultPackage>
-                        <includeTable>USER</includeTable>
-                    </dbimport>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>mysql</groupId>
-                        <artifactId>mysql-connector-java</artifactId>
-                        <version>5.1.8</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
         </plugins>
     </build>
 
@@ -98,6 +70,12 @@
             <dependency>
                 <groupId>org.apache.cayenne</groupId>
                 <artifactId>cayenne-server</artifactId>
+                <version>4.0.B1</version>
+            </dependency>
+            <!--java8对象支持 比如LocalDateTime -->
+            <dependency>
+                <groupId>org.apache.cayenne</groupId>
+                <artifactId>cayenne-java8</artifactId>
                 <version>4.0.B1</version>
             </dependency>
         </dependencies>

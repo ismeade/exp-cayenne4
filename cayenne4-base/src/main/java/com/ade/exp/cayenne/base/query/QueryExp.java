@@ -3,12 +3,13 @@ package com.ade.exp.cayenne.base.query;
 import com.ade.exp.cayenne.base.persistent.Company;
 import com.ade.exp.cayenne.base.persistent.User;
 import org.apache.cayenne.ObjectContext;
+import org.apache.cayenne.QueryResponse;
+import org.apache.cayenne.ResultBatchIterator;
+import org.apache.cayenne.ResultIterator;
 import org.apache.cayenne.configuration.server.ServerRuntime;
 import org.apache.cayenne.query.ObjectSelect;
-import org.apache.cayenne.query.QueryCacheStrategy;
 import org.apache.cayenne.query.RefreshQuery;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -132,13 +133,54 @@ public class QueryExp {
     }
 
     public static void main(String[] args) {
-        base2();
-        try {
-            TimeUnit.SECONDS.sleep(20);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        //base2();
+        //try {
+        //    TimeUnit.SECONDS.sleep(20);
+        //} catch (InterruptedException e) {
+        //    e.printStackTrace();
+        //}
+        //base2();
+        ObjectContext context = cayenneRuntime.newContext();
+        ResultBatchIterator<User> iterator = ObjectSelect
+                .query(User.class)
+                .prefetch(User.COMPANY.joint())
+                .sharedCache("a")
+                .batchIterator(context, 1);
+                //.select(context);
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+            System.out.println("-----");
         }
-        base2();
+        iterator.close();
+
+        //Company company = context.newObject(Company.class);
+        //company.setName("company888");
+        //user.setCompany(company);
+        //context.commitChanges();
+
+        //System.out.println(user);
+        //System.out.println("==");
+        //System.out.println(user.getCompany());
+
+        //try {
+        //    TimeUnit.SECONDS.sleep(5);
+        //} catch (InterruptedException e) {
+        //    e.printStackTrace();
+        //}
+        System.out.println("--");
+        RefreshQuery refresh = new RefreshQuery("a");
+        context.performGenericQuery(refresh);
+
+        System.out.println("--");
+        User user2 = ObjectSelect
+                .query(User.class)
+                .where(User.NAME.eq("user888"))
+                .prefetch(User.COMPANY.joint())
+                .sharedCache("a")
+                .selectFirst(context);
+        System.out.println("--");
+        System.out.println(user2);
+
     }
 
 }

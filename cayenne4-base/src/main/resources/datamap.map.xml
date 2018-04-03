@@ -4,17 +4,18 @@
 	 xsi:schemaLocation="http://cayenne.apache.org/schema/9/modelMap http://cayenne.apache.org/schema/9/modelMap.xsd"
 	 project-version="9">
 	<property name="defaultPackage" value="com.ade.exp.cayenne.base.persistent"/>
-	<db-entity name="COMPANY">
+	<property name="defaultCatalog" value="exp"/>
+	<db-entity name="COMPANY" catalog="exp">
 		<db-attribute name="address" type="VARCHAR" length="100"/>
 		<db-attribute name="id" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
 		<db-attribute name="name" type="VARCHAR" length="20"/>
 	</db-entity>
-	<db-entity name="COUNTRY">
+	<db-entity name="COUNTRY" catalog="exp">
 		<db-attribute name="CODE" type="INTEGER" length="10"/>
 		<db-attribute name="ID" type="INTEGER" isPrimaryKey="true" isMandatory="true" length="10"/>
 		<db-attribute name="NAME" type="VARCHAR" length="50"/>
 	</db-entity>
-	<db-entity name="USER">
+	<db-entity name="USER" catalog="exp">
 		<db-attribute name="ADDRESS" type="VARCHAR" length="100"/>
 		<db-attribute name="age" type="INTEGER" length="10"/>
 		<db-attribute name="company_id" type="INTEGER" length="10"/>
